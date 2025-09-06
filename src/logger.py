@@ -24,13 +24,4 @@ def get_logger(name: str):
 if __name__ == "__main__":
     test_logger = get_logger(__name__)
     test_logger.info("Logger setup complete")
-    test_logger.warning('dasda')
     
-"""
-logging.debug("this is debug message")
-logging.info("this is info message")
-logging.warning("this is warning message")
-logging.error("this is error  message")
-logging.critical("this is critical message ")
-
-"""
