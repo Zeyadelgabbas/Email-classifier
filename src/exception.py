@@ -1,6 +1,5 @@
 import sys
-import logger
-
+from src.logger import get_logger
 def error_message_detail(error, error_details: sys):
     _, _, error_tb = error_details.exc_info()
     file_name = error_tb.tb_frame.f_code.co_filename
@@ -18,7 +17,8 @@ class CustomException(Exception):
         return self.error_message
 
 
-log=logger.get_logger(__name__) 
+log=get_logger(__name__) 
+log.info("this is the exception file")
 
 if __name__ =='__main__':          # Excpetion and logging test
     try : 
