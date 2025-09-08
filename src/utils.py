@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 import dill
 from sklearn.metrics import r2_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split , GridSearchCV
+
 
 from src.exception import CustomException
 from src.logger import get_logger
@@ -26,12 +27,17 @@ def save_object(file_path,obj):
         raise custom_error
     
 
-def model_evaluate(models,X_train,X_val , X_test , y_train , y_val , y_test):
+def model_evaluate(models,X_train,X_val , X_test , y_train , y_val , y_test,params , cv = 3):
         
     try :
         model_report = {}
         trained_models={}
         for name , model in models.items():
+
+            param = params[name]
+            gs = GridSearchCV(model,param,cv=cv)
+            gs.fit(X_train,y_train)
+            model.set_params(**gs.best_params_)
 
             model.fit(X_train,y_train)
             pred_vals = model.predict(X_val)
