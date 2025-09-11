@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Math Score Predictor</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 430px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+            padding: 32px 36px 28px 36px;
+        }
+        h2 {
+            text-align: center;
+            color: #2376ae;
+            margin-bottom: 22px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2b2c34;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        input[type="text"], 
+        input[type="number"], 
+        select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #b4c6e7;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        select:focus {
+            border-color: #2376ae;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(90deg, #2376ae 60%, #4cb8c4 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #195d8a 60%, #3ca8b1 100%);
+        }
+        .result {
+            margin-top: 25px;
+            background: #f6fafd;
+            border-left: 4px solid #2376ae;
+            border-radius: 6px;
+            padding: 14px 16px;
+            color: #2376ae;
+            font-size: 1.1rem;
+            font-weight: 500;
+            min-height: 24px;
+            text-align: center;
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 18px 7vw 16px 7vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Math Score Predictor</h2>
+        <form id="predict-form">
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" required>
+                    <option value="" disabled selected>Select gender</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="race">Race/Ethnicity</label>
+                <select id="race" required>
+                    <option value="" disabled selected>Select group</option>
+                    <option value="group A">Group A</option>
+                    <option value="group B">Group B</option>
+                    <option value="group C">Group C</option>
+                    <option value="group D">Group D</option>
+                    <option value="group E">Group E</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="parental_education">Parental Education</label>
+                <select id="parental_education" required>
+                    <option value="" disabled selected>Select education level</option>
+                    <option value="some high school">Some high school</option>
+                    <option value="high school">High school</option>
+                    <option value="some college">Some college</option>
+                    <option value="associate's degree">Associate's degree</option>
+                    <option value="bachelor's degree">Bachelor's degree</option>
+                    <option value="master's degree">Master's degree</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lunch">Lunch</label>
+                <select id="lunch" required>
+                    <option value="" disabled selected>Select lunch type</option>
+                    <option value="standard">Standard</option>
+                    <option value="free/reduced">Free/Reduced</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="test_preparation_course">Test Preparation Course</label>
+                <select id="test_preparation_course" required>
+                    <option value="" disabled selected>Select option</option>
+                    <option value="none">None</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reading_score">Reading Score</label>
+                <input type="number" id="reading_score" min="0" max="100" required placeholder="e.g., 75">
+            </div>
+            <div class="form-group">
+                <label for="writing_score">Writing Score</label>
+                <input type="number" id="writing_score" min="0" max="100" required placeholder="e.g., 80">
+            </div>
+            <button type="submit">Predict Math Score</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predict-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const gender = document.getElementById('gender').value;
+            const parental_education = document.getElementById('parental_education').value;
+            const lunch = document.getElementById('lunch').value;
+            const reading_score = document.getElementById('reading_score').value;
+            const writing_score = document.getElementById('writing_score').value;
+            const test_preparation_course = document.getElementById('test_preparation_course').value;
+            const race_ethnicity = document.getElementById('race').value;
+
+            // Replace the following URL with your backend endpoint
+            const apiUrl = '/predict'; // Example endpoint
+
+            document.getElementById('result').textContent = "Predicting...";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gender,
+                        parental_education,
+                        lunch,
+                        reading_score: Number(reading_score),
+                        writing_score: Number(writing_score),
+                        test_preparation_course,
+                        race_ethnicity
+                    })
+                });
+                const data = await response.json();
+                if (response.ok && data.prediction !== undefined) {
+                    document.getElementById('result').textContent = `Predicted Math Score: ${data.prediction}`;
+                } else {
+                    document.getElementById('result').textContent = "Prediction failed. Please try again.";
+                }
+            } catch (err) {
+                document.getElementById('result').textContent = "Error occurred. Please try again later.";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -76,6 +76,7 @@ if __name__ == "__main__":
     print(y_test.shape)
     print(preprocessor_path)
     model_trainer_obj = ModelTrainer()
+    
     print(model_trainer_obj.initiate_model_trainer(X_train,X_val,X_test,y_train,y_val,y_test))
          
 

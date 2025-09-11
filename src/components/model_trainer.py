@@ -103,7 +103,7 @@ class ModelTrainer:
             )
 
             return(
-                best_model_score
+                [best_model_name , best_model_score]
             )
 
         except Exception as e:

@@ -56,3 +56,14 @@ def model_evaluate(models,X_train,X_val , X_test , y_train , y_val , y_test,para
       logging.error(custom_error)
       raise custom_error
      
+
+
+def load_object(file_path):
+
+    try: 
+        with open(file_path,"rb") as file_obj:
+            return dill.load(file_obj)
+        
+    except Exception as e :
+        logging.error(CustomException(e,sys))
+        raise CustomException(e,sys)
